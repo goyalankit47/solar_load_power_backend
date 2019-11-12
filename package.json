@@ -1,0 +1,27 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goyalankit47/solar_load_power_backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/goyalankit47/solar_load_power_backend/issues"
+  },
+  "homepage": "https://github.com/goyalankit47/solar_load_power_backend#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "moment": "^2.24.0",
+    "pg": "^7.12.1",
+    "request": "^2.88.0",
+    "url": "^0.11.0"
+  }
+}
