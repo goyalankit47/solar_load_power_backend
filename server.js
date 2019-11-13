@@ -1,6 +1,5 @@
 const express = require('express');
 const request = require('request');
-// const Promise = require('promise');
 const moment = require('moment');
 const app = express();
 const config = require('./database_config');
@@ -21,7 +20,6 @@ function getInitialTime() {
             }
         })
     })
-
 }
 
 function getSolarData() {
@@ -62,6 +60,38 @@ function getLoadData() {
     })
 }
 
+function calculateAvgHourData(data) {
+    let lastHour = moment().format('H');
+    let resultedData = []
+    for (let i = 0; i < data.length; i++) {
+        let startHour = -1;
+        let sum = 0;
+        let count = 0;
+        let resultedArray = [];
+        for (let j = 0; j < data[i].length; j++) {
+            let curHour = parseInt(moment(data[i][j].timestamp).format('H'));
+            if (curHour == lastHour) break;
+            if (curHour != startHour) {
+                sum += data[i][j].value;
+                count += 1;
+                obj = {}
+                obj.timestamp = data[i][j].timestamp;
+                obj.value = (sum / count);
+                resultedArray.push(obj);
+
+                sum = 0;
+                count = 0;
+                startHour = curHour;
+            }
+            sum += data[i][j].value
+            count += 1;
+        }
+        resultedData.push(resultedArray);
+    }
+
+    return resultedData;
+}
+
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     next();
@@ -71,20 +101,19 @@ app.get('/v1/graph/1', (req, res) => {
     var url_parts = url.parse(req.url, true);
     var query = url_parts.query;
 
-    if (query.period == 'hour') {
-        res.end();
-    } else {
-        Promise.all([
-            getSolarData(),
-            getLoadData(),
-        ])
-            .then((data) => {
-                res.json({ "graph_value": [{ "values": data[1] }, { "values": data[0] }] });
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    }
+    Promise.all([
+        getSolarData(),
+        getLoadData(),
+    ])
+        .then((data) => {
+            if (query.period == 'hour') {
+                data = calculateAvgHourData(data);
+            }
+            res.json({ "graph_value": [{ "values": data[1] }, { "values": data[0] }] });
+        })
+        .catch((err) => {
+            console.log(err);
+        })
 });
 
 app.get('/v1/boxVal/1', (req, res) => {
