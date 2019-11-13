@@ -1,7 +1,7 @@
 module.exports = {
 	user : 'postgres',
 	host : 'localhost',
-	name : 'ampere_db',
-	password : 'webking12$',
+	name : '',	//	database_name
+	password : '',	// database_password
 	port : '5432'
 };
