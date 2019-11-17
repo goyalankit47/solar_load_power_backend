@@ -3,8 +3,6 @@ const request = require('request');
 const moment = require('moment');
 const app = express();
 const path = require('path');
-// const config = require('./database_config');
-// const db = require('./database_connection');
 const knex = require('./knex/knex.js');
 const url = require('url');
 let initialEpoch = null;
@@ -13,25 +11,11 @@ let pool = null;
 function getInitialTime() {
     return new Promise((resolve, reject) => {
         knex('solar_power').orderBy('timestamp').limit(1).then((res) => {
-            // if (err) {
-            //     reject(err);
-            // }
-            // else {
             resolve(moment((res[0].timestamp), 'YYYY-DD-MM HH:mm:ss').unix());
-            // }
         })
             .catch((err) => {
                 reject(err)
             })
-        // let query = `SELECT timestamp FROM public.solar_power order by timestamp limit 1`;
-        // pool.query(query, (err, res) => {
-        //     if (err) {
-        //         reject(err);
-        //     }
-        //     else {
-        //         resolve(moment((res.rows[0].timestamp), 'YYYY-DD-MM HH:mm:ss').unix());
-        //     }
-        // })
     })
 }
 
@@ -47,16 +31,6 @@ function getSolarData() {
             .catch((err) => {
                 reject(err)
             })
-        // let query = `SELECT id,value,timestamp FROM public.solar_power where timestamp <= '${requiredDate}'`;
-        // pool.query(query, (err, res) => {
-        //     if (err) {
-        //         console.log(err);
-        //         reject(err);
-        //     }
-        //     else {
-        //         resolve(res.rows);
-        //     }
-        // })
     })
 }
 
@@ -72,17 +46,6 @@ function getLoadData() {
             .catch((err) => {
                 reject(err)
             })
-
-        // let query = `SELECT id,value,timestamp FROM public.load_power where timestamp <= '${requiredDate}'`;
-        // pool.query(query, (err, res) => {
-        //     if (err) {
-        //         console.log(err);
-        //         reject(err);
-        //     }
-        //     else {
-        //         resolve(res.rows);
-        //     }
-        // })
     })
 }
 
@@ -160,8 +123,6 @@ app.get('/v1/boxVal/1', (req, res) => {
     )
 });
 
-// db.conn_db('pg', config, (cb) => {
-//     pool = cb;
 getInitialTime()
     .then((res) => {
         initialEpoch = res;
@@ -169,4 +130,3 @@ getInitialTime()
         app.listen(PORT, () => console.log(`listening on ${PORT}`));
     })
     .catch((error) => { console.log(error); })
-// })

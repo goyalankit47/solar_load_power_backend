@@ -7,8 +7,8 @@ module.exports = {
     connection: {
       host : '127.0.0.1',
       user : 'postgres',
-      password : 'webking12$',
-      database : 'ampere_db',
+      password : '',  // database_password
+      database : '',   // database_name
       charset: 'utf8'
     }
     // ,
