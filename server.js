@@ -165,7 +165,7 @@ app.get('/v1/boxVal/1', (req, res) => {
 getInitialTime()
     .then((res) => {
         initialEpoch = res;
-        const PORT = 3000;
+        const PORT = process.env.PORT || 3000;
         app.listen(PORT, () => console.log(`listening on ${PORT}`));
     })
     .catch((error) => { console.log(error); })
