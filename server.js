@@ -1,6 +1,6 @@
 const express = require('express');
 const request = require('request');
-const moment = require('moment');
+const moment = require('moment-timezone');
 const app = express();
 const path = require('path');
 const knex = require('./knex/knex.js');
@@ -11,7 +11,7 @@ let pool = null;
 function getInitialTime() {
     return new Promise((resolve, reject) => {
         knex('solar_power').orderBy('timestamp').limit(1).then((res) => {
-            resolve(moment((res[0].timestamp), 'YYYY-DD-MM HH:mm:ss').unix());
+            resolve(moment((res[0].timestamp), 'YYYY-DD-MM HH:mm:ss').tz("Asia/Kolkata").unix());
         })
             .catch((err) => {
                 reject(err)
@@ -21,9 +21,9 @@ function getInitialTime() {
 
 function getSolarData() {
     return new Promise((resolve, reject) => {
-        let currentTime = moment().unix();
+        let currentTime = moment().tz("Asia/Kolkata").unix();
         let requiredTime = (initialEpoch + ((currentTime - initialEpoch) % 86400)) * 1000;
-        let requiredDate = moment(requiredTime).format('YYYY-MM-DD HH:mm:ss');
+        let requiredDate = moment(requiredTime).tz("Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss');
 
         knex('solar_power').where('timestamp', '<=', requiredDate).then((res) => {
             resolve(res);
@@ -36,9 +36,9 @@ function getSolarData() {
 
 function getLoadData() {
     return new Promise((resolve, reject) => {
-        let currentTime = moment().unix();
+        let currentTime = moment().tz("Asia/Kolkata").unix();
         let requiredTime = (initialEpoch + ((currentTime - initialEpoch) % 86400)) * 1000;
-        let requiredDate = moment(requiredTime).format('YYYY-MM-DD HH:mm:ss');
+        let requiredDate = moment(requiredTime).tz("Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss');
 
         knex('load_power').where('timestamp', '<=', requiredDate).then((res) => {
             resolve(res);
@@ -50,7 +50,7 @@ function getLoadData() {
 }
 
 function calculateAvgHourData(data) {
-    let lastHour = moment().format('H');
+    let lastHour = moment().tz("Asia/Kolkata").format('H');
     let resultedData = []
     for (let i = 0; i < data.length; i++) {
         let startHour = -1;
@@ -58,7 +58,7 @@ function calculateAvgHourData(data) {
         let count = 0;
         let resultedArray = [];
         for (let j = 0; j < data[i].length; j++) {
-            let curHour = parseInt(moment(data[i][j].timestamp).format('H'));
+            let curHour = parseInt(moment(data[i][j].timestamp).tz("Asia/Kolkata").format('H'));
             if (curHour == lastHour) break;
             if (curHour != startHour) {
                 sum += data[i][j].value;
