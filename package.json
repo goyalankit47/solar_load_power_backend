@@ -19,6 +19,7 @@
   "homepage": "https://github.com/goyalankit47/solar_load_power_backend#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "knex": "^0.20.2",
     "moment": "^2.24.0",
     "pg": "^7.12.1",
     "request": "^2.88.0",

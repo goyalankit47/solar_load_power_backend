@@ -9,6 +9,6 @@
 2. `cd solar_load_power_backend`
 3. run `npm i`
 4. restore given `db.dump` in postgres by running `pg_restore -U <username> -p 5432 -d <dbname> -1 db.dump`
-5. Enter database_name and database_password in `database_config.js`
+5. Enter database_name and database_password in `knexfile.js`
 6. run `npm start`
 7. server is now listening on `port : 3000`
