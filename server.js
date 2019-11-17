@@ -2,6 +2,7 @@ const express = require('express');
 const request = require('request');
 const moment = require('moment');
 const app = express();
+const path = require('path');
 const config = require('./database_config');
 const db = require('./database_connection');
 const url = require('url');
@@ -95,6 +96,12 @@ function calculateAvgHourData(data) {
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     next();
+});
+
+app.use(express.static('dist/app'))
+
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname, '/dist/app/index.html'));
 });
 
 app.get('/v1/graph/1', (req, res) => {
