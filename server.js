@@ -30,6 +30,7 @@ function getSolarData() {
         })
             .catch((err) => {
                 reject(err)
+                console.log("not able to get solar data");
             })
     })
 }
@@ -45,6 +46,7 @@ function getLoadData() {
         })
             .catch((err) => {
                 reject(err)
+                console.log("not able to load data");
             })
     })
 }
