@@ -118,7 +118,7 @@ app.get('/v1/boxVal/1', (req, res) => {
         { url: ' http://13.234.38.186/v1/boxVal/1' },
         (error, response, body) => {
             if (error || response.statusCode !== 200) {
-                console.log("here");
+                console.log("in boxval api");
                 return res.json({ type: 'error', message: error.message });
             }
             res.json(JSON.parse(body));
